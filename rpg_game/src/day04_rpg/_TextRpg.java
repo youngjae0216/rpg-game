@@ -13,9 +13,7 @@ class MainGame {
 		Shop shop = new Shop();
 		FileData fileData = new FileData();
 		while (true) {
-			System.out.println("=============== [메인메뉴] ================");
-			System.out.println("[1.길드관리] [2.상점] [3.인벤토리]");
-			System.out.println("[4.저장] [5.로드] [0.종료]");
+			printMainMenu();
 			int sel = scan.nextInt();
 			if (sel == 1) {
 				player.guildMenu();
@@ -41,6 +39,12 @@ class MainGame {
 			}
 		}
 		MainGame.scan.close();
+	}
+	
+	private void printMainMenu() {
+		System.out.println("=============== [메인메뉴] ================");
+		System.out.println("[1.길드관리] [2.상점] [3.인벤토리]");
+		System.out.println("[4.저장] [5.로드] [0.종료]");
 	}
 }
 

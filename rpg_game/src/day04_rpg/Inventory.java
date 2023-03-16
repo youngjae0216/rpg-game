@@ -30,27 +30,31 @@ public class Inventory {
 			Player.guild.printUnitItem(selUnit - 1);
 			printItemList();
 			System.out.println("착용할 아이템 번호를 입력하세요 [0.뒤로가기]");
-			int selEquip = MainGame.scan.nextInt();
-			if (selEquip == 0)
+			int selEquip = MainGame.scan.nextInt() - 1;
+			if (selEquip >= 0) {
+				if (itemList.get(selEquip).getKind() == Item.WEAPON) {
+					if (Player.getGuildUnit(selUnit - 1).getWeapon() != null) {
+						itemList.add(Player.getGuildUnit(selUnit - 1).getWeapon());
+					}
+					Player.getGuildUnit(selUnit - 1).setWeapon(itemList.get(selEquip));
+				} 
+				else if (itemList.get(selEquip).getKind() == Item.ARMOR) {
+					if (Player.getGuildUnit(selUnit - 1).getArmor() != null) {
+						itemList.add(Player.getGuildUnit(selUnit - 1).getArmor());
+					}
+					Player.getGuildUnit(selUnit - 1).setArmor(itemList.get(selEquip));
+				} 
+				else if (itemList.get(selEquip).getKind() == Item.RING) {
+					if (Player.getGuildUnit(selUnit - 1).getRing() != null) {
+						itemList.add(Player.getGuildUnit(selUnit - 1).getRing());
+					}
+					Player.getGuildUnit(selUnit - 1).setRing(itemList.get(selEquip));
+				}
+				itemList.remove(selEquip);
+
+			} else {
 				break;
-			selEquip -= 1;
-			if (itemList.get(selEquip).getKind() == Item.WEAPON) {
-				if (Player.getGuildUnit(selUnit - 1).getWeapon() != null) {
-					itemList.add(Player.getGuildUnit(selUnit - 1).getWeapon());
-				}
-				Player.getGuildUnit(selUnit - 1).setWeapon(itemList.get(selEquip));
-			} else if (itemList.get(selEquip).getKind() == Item.ARMOR) {
-				if (Player.getGuildUnit(selUnit - 1).getArmor() != null) {
-					itemList.add(Player.getGuildUnit(selUnit - 1).getArmor());
-				}
-				Player.getGuildUnit(selUnit - 1).setArmor(itemList.get(selEquip));
-			} else if (itemList.get(selEquip).getKind() == Item.RING) {
-				if (Player.getGuildUnit(selUnit - 1).getRing() != null) {
-					itemList.add(Player.getGuildUnit(selUnit - 1).getRing());
-				}
-				Player.getGuildUnit(selUnit - 1).setRing(itemList.get(selEquip));
 			}
-			itemList.remove(selEquip);
 		}
 	}
 

@@ -5,25 +5,21 @@ import java.util.ArrayList;
 public class Guild {
 	final int PARTY_SIZE = 4;
 	ArrayList<Unit> guildList = new ArrayList<>();
-	Unit[] partyList;
+	private Unit[] partyList;
 
 	public void setGuild() {
 		Unit temp = new Unit("호랑이", 1, 100, 10, 5, 0);
-		guildList.add(temp);
-		temp = new Unit("강아지", 1, 80, 7, 3, 0);
-		guildList.add(temp);
-		temp = new Unit("사슴", 1, 50, 3, 1, 0);
-		guildList.add(temp);
-		temp = new Unit("두더지", 1, 70, 5, 2, 0);
-		guildList.add(temp);
-		temp = new Unit("돼지", 1, 200, 4, 8, 0);
-		guildList.add(temp);
-		temp = new Unit("사자", 1, 120, 11, 7, 0);
-		guildList.add(temp);
-		for (int i = 0; i < 4; i++) {
+		this.guildList.add(temp);
+		temp = new Unit("황금돼지", 1, 200, 11, 12, 0);
+		this.guildList.add(temp);
+		temp = new Unit("거북이", 1, 50, 2, 5, 0);
+		this.guildList.add(temp);
+		temp = new Unit("장영재", 1, 400, 20, 20, 0);
+		this.guildList.add(temp);
+		for (int i = 0; i < this.guildList.size(); i++) {
 			guildList.get(i).setParty(true);
 		}
-		partyList = new Unit[PARTY_SIZE];
+		this.partyList = new Unit[this.PARTY_SIZE];
 		int n = 0;
 		for (int i = 0; i < guildList.size(); i++) {
 			if (guildList.get(i).isParty() == true) {
@@ -64,8 +60,10 @@ public class Guild {
 	}
 
 	public void buyUnit() {
-		if (Player.getMoney() < 5000)
+		if (Player.getMoney() < 5000) {
+			System.out.println("골드가 부족합니다.");
 			return;
+		}
 		String[] n1 = { "박", "이", "김", "최", "유", "지", "오" };
 		String[] n2 = { "명", "기", "종", "민", "영", "석", "광" };
 		String[] n3 = { "수", "자", "민", "수", "석", "재", "철" };
@@ -121,14 +119,14 @@ public class Guild {
 
 	public void printParty() {
 		System.out.println("================ [파티원] ===============");
-		for (int i = 0; i < PARTY_SIZE; i++) {
+		for (int i = 0; i < this.partyList.length; i++) {
 			System.out.print("[" + (i + 1) + "번]");
-			System.out.print(" [이름 : " + partyList[i].getName() + "]");
-			System.out.print(" [레벨 : " + partyList[i].getLevel() + "]");
-			System.out.print(" [체력 : " + partyList[i].getHp());
-			System.out.println(" / " + partyList[i].getMaxHp() + "]");
-			System.out.print("[공격력 : " + partyList[i].getAtt() + "]");
-			System.out.print(" [방어력 : " + partyList[i].getDef() + "]");
+			System.out.print(" [이름 : " + this.partyList[i].getName() + "]");
+			System.out.print(" [레벨 : " + this.partyList[i].getLevel() + "]");
+			System.out.print(" [체력 : " + this.partyList[i].getHp());
+			System.out.println(" / " + this.partyList[i].getMaxHp() + "]");
+			System.out.print("[공격력 : " + this.partyList[i].getAtt() + "]");
+			System.out.print(" [방어력 : " + this.partyList[i].getDef() + "]");
 			System.out.println(" [파티중 : " + guildList.get(i).isParty() + "]");
 			System.out.println("");
 		}
@@ -155,10 +153,9 @@ public class Guild {
 		System.out.println("====================================");
 
 		int n = 0;
-		for (int i = 0; i < guildList.size(); i++) {
-			if (guildList.get(i).isParty()) {
-				partyList[n] = guildList.get(i);
-				n += 1;
+		for (int i = 0; i < this.guildList.size(); i++) {
+			if (this.guildList.get(i).isParty()) {
+				this.partyList[n++] = this.guildList.get(i);
 			}
 		}
 		try {
@@ -171,7 +168,7 @@ public class Guild {
 	public void guildMenu() {
 		while (true) {
 			System.out.println("=============== [길드관리] ================");
-			System.out.println("[1.길드목록] [2.길드원추가] [3.길드원삭제]\n" + "[4.파티원교체] [5.정렬]  [0.뒤로가기]");
+			System.out.println("[1.길드원목록] [2.길드원추가(5000골드)] [3.길드원삭제]\n" + "[4.파티원교체] [5.정렬]  [0.뒤로가기]");
 			int sel = MainGame.scan.nextInt();
 			if (sel == 1) {
 				printAllUnitStaus();
@@ -179,12 +176,26 @@ public class Guild {
 				buyUnit();
 			} else if (sel == 3) {
 				removeUnit();
-			} else if (sel == 4) {
+			} 
+			else if (sel == 4) {
 				partyChange();
-			} else if (sel == 0) {
+			} 
+//			else if (sel == 5) {
+//				arrangeUnit();
+//			} 
+			else if (sel == 0) {
 				break;
 			}
 		}
 	}
+
+//	private void arrangeUnit() {	
+//		for(int i=0; i<this.PARTY_SIZE;i++) {
+//			for(int j=i;j<this.PARTY_SIZE;j++) {
+//				
+//			}
+//		}
+//		
+//	}
 
 }

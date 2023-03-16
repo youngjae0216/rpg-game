@@ -115,11 +115,11 @@ public class FileData {
 			br = new BufferedReader(reader);
 			String money = br.readLine();
 			Player.setMoney(Integer.parseInt(money));
-			System.out.println(Player.getMoney());
+			System.out.println("골드 : "+Player.getMoney());
 			String guildSize = br.readLine();
 			int size = Integer.parseInt(guildSize);
 			Player.guild.guildList.clear();
-			System.out.println(size);
+			System.out.println("길드원 수 : " + size);
 			for (int i = 0; i < size; i++) {
 				String unitData = br.readLine();
 				String[] unitArr = unitData.split("/");
@@ -175,7 +175,7 @@ public class FileData {
 			}
 			// ===================== item ============================
 			String invenSize = br.readLine();
-			System.out.println(invenSize);
+			System.out.println("아이템 수 : " + invenSize);
 			int inSize = Integer.parseInt(invenSize);
 
 			Player.inven.itemList.clear();
