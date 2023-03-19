@@ -15,25 +15,26 @@ public class FightManager {
 		this.guild = new Guild();
 		this.ran = new Random();
 
-		Monster temp = new Monster("슬라임", 30, 2, 0, 2);
+		Monster temp = new Monster("슬라임", 50, 2, 0, 2, 100);
 		this.monsterList.add(temp);
-		temp = new Monster("늑대", 50, 5, 0, 5);
+		temp = new Monster("늑대", 100, 5, 0, 5, 200);
 		this.monsterList.add(temp);
-		temp = new Monster("골렘", 100, 10, 10, 12);
+		temp = new Monster("골렘", 150, 10, 10, 12, 300);
 		this.monsterList.add(temp);
-		temp = new Monster("고블린", 200, 15, 0, 22);
+		temp = new Monster("고블린", 200, 15, 0, 22, 400);
 		this.monsterList.add(temp);
-		temp = new Monster("리치", 300, 30, 0, 40);
+		temp = new Monster("리치", 300, 30, 0, 40, 1000);
 		this.monsterList.add(temp);
-		temp = new Monster("킹 스켈레톤", 1000, 50, 10, 100);
+		temp = new Monster("킹 스켈레톤", 1000, 50, 10, 100, 10000);
 		this.monsterList.add(temp);
 	}
 
 	public void run() {
-
-		while (true) {
-			printAllMonster();
-			int sel = selectMonster() - 1;
+		printAllMonster();
+		int sel = selectMonster() - 1;
+		if (sel == -1) {
+			return;
+		} else {
 			isFight(sel);
 		}
 	}
@@ -43,41 +44,45 @@ public class FightManager {
 		boolean isDead = true;
 		while (isDead) {
 			attack(index);
-			if (Guild.partyList.length == 0 && monsterList.get(index).getHp() <= 0) {
-				isDead = false;
+			if (monsterList.get(index).getHp() > 0) {
+				defense(index);
+			} else {
+				monsterList.get(index).setHp(monsterList.get(index).getMaxHp());
+				break;
 			}
-			result(index);
 		}
 	}
 
 	private void result(int index) {
-		//exp 관리
+		// exp 관리
 		for (int i = 0; i < Guild.partyList.length; i++) {
 			Monster monster = this.monsterList.get(index);
 			Unit unit = Guild.partyList[i];
 			int exp = monster.getExp();
-			while(exp<=0) {
+			while (exp > 0) {
 				unit.setExp(unit.getExp() + exp);
-				if(unit.getExp()>=10) {
+				if (unit.getExp() >= 10) {
 					levelUp(i);
+					System.out.printf("★★%s 레벨업!!★★\n",unit.getName());
 				}
-				exp-=10;
+				exp -= 10;
 			}
 		}
-		
+
 	}
 
 	private void levelUp(int index) {
 		Unit unit = Guild.partyList[index];
-		unit.setLevel(unit.getLevel()+1);
-		unit.setMaxHp(unit.getMaxHp()+10);
-		unit.setAtt(unit.getAtt()+3);
+		unit.setLevel(unit.getLevel() + 1);
+		unit.setMaxHp(unit.getMaxHp() + 10);
+		unit.setAtt(unit.getAtt() + 3);
 		unit.setHp(unit.getMaxHp());
+		unit.setExp(0);
 	}
 
 	private void defense(int index) {
-		System.out.println("## 방어 ##");
-		int rNum = this.ran.nextInt(Guild.partyList.length) + 1;
+		System.out.println("    ## 방어 ##");
+		int rNum = this.ran.nextInt(Guild.partyList.length);
 		Monster monster = this.monsterList.get(index);
 		Unit unit = Guild.partyList[rNum];
 		int result = 0;
@@ -89,7 +94,7 @@ public class FightManager {
 		System.out.printf("%s가 %s에게 %d의 데미지를 주었다!\n", monster.getName(), unit.getName(), result);
 		unit.setHp(unit.getHp() - result);
 		if (unit.getHp() <= 0) {
-			System.out.printf("%s가 죽었다..", unit.getName());
+			System.out.printf("%s가 죽었다..\n", unit.getName());
 			Unit[] temp = Guild.partyList;
 			Guild.partyList = new Unit[temp.length - 1];
 			int n = 0;
@@ -102,7 +107,7 @@ public class FightManager {
 	}
 
 	private void attack(int index) {
-		System.out.println("## 공격 ##");
+		System.out.println("    ## 공격 ##");
 		for (int i = 0; i < Guild.partyList.length; i++) {
 			Monster monster = this.monsterList.get(index);
 			Unit unit = Guild.partyList[i];
@@ -117,15 +122,13 @@ public class FightManager {
 			monster.setHp(monster.getHp() - result);
 			if (monster.getHp() <= 0) {
 				System.out.println("몬스터가 죽었다!");
-				monster.setAtt(monster.getMaxHp());
+				result(index);
+				Player.setMoney(Player.getMoney()+monster.getGold());
 				for (int j = 0; j < Guild.partyList.length; j++) {
-					Unit temp = Guild.partyList[i];
+					Unit temp = Guild.partyList[j];
 					temp.setHp(temp.getMaxHp());
 				}
-
 				break;
-			} else {
-				defense(index);
 			}
 			try {
 				Thread.sleep(300);
@@ -143,6 +146,7 @@ public class FightManager {
 			System.out.printf("hp:%d att:%d def:%d\n", this.monsterList.get(i).getMaxHp(),
 					this.monsterList.get(i).getAtt(), this.monsterList.get(i).getDef());
 		}
+		System.out.println("[0] 뒤로가기 ");
 	}
 
 	private int selectMonster() {
