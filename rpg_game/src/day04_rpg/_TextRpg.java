@@ -12,6 +12,7 @@ class MainGame {
 		Player player = new Player();
 		Shop shop = new Shop();
 		FileData fileData = new FileData();
+		FightManager fm = new FightManager();
 		while (true) {
 			printMainMenu();
 			int sel = scan.nextInt();
@@ -22,16 +23,22 @@ class MainGame {
 			} else if (sel == 3) {
 				player.inventoryMenu();
 			} else if (sel == 4) {
-				try {
-					fileData.save();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				fm.run();
 			} else if (sel == 5) {
 				try {
-					fileData.loadData();
+					fileData.save();
+					System.err.println("저장완료");
 				} catch (IOException e) {
 					e.printStackTrace();
+					System.err.println("저장실패");
+				}
+			} else if (sel == 6) {
+				try {
+					fileData.loadData();
+					System.err.println("로드성공");
+				} catch (IOException e) {
+					e.printStackTrace();
+					System.err.println("로드실패");
 				}
 			} else {
 				System.out.println("게임을 종료 합니다.");
@@ -40,11 +47,11 @@ class MainGame {
 		}
 		MainGame.scan.close();
 	}
-	
+
 	private void printMainMenu() {
 		System.out.println("=============== [메인메뉴] ================");
-		System.out.println("[1.길드관리] [2.상점] [3.인벤토리]");
-		System.out.println("[4.저장] [5.로드] [0.종료]");
+		System.out.println("[1.길드관리] [2.상점] [3.인벤토리] [4. 사냥터]");
+		System.out.println("[5.저장] [6.로드] [0.종료]");
 	}
 }
 
