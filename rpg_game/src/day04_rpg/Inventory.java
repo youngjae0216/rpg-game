@@ -3,7 +3,7 @@ package day04_rpg;
 import java.util.ArrayList;
 
 public class Inventory {
-	ArrayList<Item> itemList = new ArrayList<>();
+	public static ArrayList<Item> itemList = new ArrayList<>();
 
 	public void inventoryMenu() {
 		while (true) {
